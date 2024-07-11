@@ -10,7 +10,6 @@ namespace ComexAPI.Controllers
     [Route("[controller]")]
     public class ProdutoController : ControllerBase
     {
-
         private readonly ILogger<ProdutoController> _logger;
         private DataContext _dataContext;
         private IMapper _mapper;
@@ -23,6 +22,18 @@ namespace ComexAPI.Controllers
             _logger = logger;
             _dataContext = dataContext;
             _mapper = mapper;
+        }
+
+        [HttpGet("{id}")]
+        public IActionResult Read(int id)
+        {
+            var produto = _dataContext.Produtos.FirstOrDefault(en => en.Id == id);
+            if (produto == null)
+            {
+                return NotFound("Produto não encontrado!");
+            }
+            ConsultaProdutoDto produtoDto = _mapper.Map<ConsultaProdutoDto>(produto);
+            return Ok(produtoDto);
         }
 
         [HttpGet]
@@ -56,6 +67,7 @@ namespace ComexAPI.Controllers
                     return NotFound("Produto Não Encontrado!");
                 }
                 _mapper.Map(produtoDto, produto);
+                _dataContext.Produtos.Update(produto);
                 _dataContext.SaveChanges();
                 return Ok("Produto Atualizado com Sucesso!");
             }

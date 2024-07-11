@@ -8,5 +8,7 @@ namespace ComexAPI.Data
         public DataContext(DbContextOptions<DataContext> options) : base(options) { }
 
         public DbSet<Produto> Produtos { get; set; }
+        public DbSet<Endereco> Enderecos { get; set; }
+        public DbSet<Cliente> Clientes { get; set; }
     }
 }
